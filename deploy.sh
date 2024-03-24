@@ -24,7 +24,7 @@ git commit -m 'deploy'
 
 # === 部署至主線 main 上,開啟下面第兩個#
 # if you are deploying to https://<USERNAME>.github.io
-# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
+# git push -f git@github.com:<caiweien>/<caiweien>.github.io.git main
 
 # === 部署到 gh-pages,開啟下面第兩個#(不熟悉可選此！)
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
