@@ -28,7 +28,7 @@ git commit -m 'deploy'
 # git push -f git@github.com:<caiweien>/<caiweien>.github.io.git main
 
 # === 部署到 gh-pages,開啟下面第兩個#(不熟悉可選此！)
-# if you are deploying to https://<USERNAME>.github.io/<REPO>
+# if you are deploying to https://<caiweien>.github.io/<REPO>
 git push -f git@github.com:sp1daTomm/SelectWave.git main:gh-pages
 
 cd -
