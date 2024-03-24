@@ -39,6 +39,7 @@ export default {
     const filterStatus = ref('active');
     const searchQuery = ref('');
     const isLoading = ref(false);
+    const doSort = ref(false);
 
     const updatePage = async (page = 1) => {
       poll.updateCreatedBy('');
@@ -73,7 +74,9 @@ export default {
         default:
           break;
       }
+      doSort.value = true;
       poll.updateSelectedSort(sort.value);
+      poll.getPolls();
     };
 
     function toggleDropdown() {
@@ -83,8 +86,12 @@ export default {
     function handleSearchFiler() {
       if (searchQuery.value === '') {
         poll.updateQuery('');
+        poll.getPolls();
+        doSort.value = true;
       } else {
+        doSort.value = true;
         poll.updateQuery(searchQuery.value);
+        poll.getPolls();
       }
     }
 
@@ -106,6 +113,7 @@ export default {
       modules: [Navigation],
       allPolls,
       sort,
+      doSort,
       sortPolls,
       selectedSort,
       isDropdownOpen,
@@ -226,12 +234,16 @@ export default {
           }
           break;
         case 'DelPoll':
-          this.handleDeletePoll(id);
           this.message.setMessage({
             title: '刪除投票',
-            message: '已成功刪除投票',
+            message: '確認是否刪除投票',
           });
-          this.message.showModal(true);
+          (async () => {
+            const result = await this.message.showConfirm();
+            if (result) {
+              this.handleDeletePoll(id);
+            }
+          })();
           break;
         default:
           break;
@@ -313,7 +325,8 @@ export default {
                   :navigation="myPolls.length >= 4 ? navigation : false">
             <swiper-slide v-for="poll in myPolls" :key="poll.id">
               <div
-                   class="relative flex flex-col overflow-hidden bg-white border-2 border-gray-300 rounded-3xl group">
+                  @click="handleDropDown('ShowDetail', poll.id)"
+                   class="relative flex flex-col overflow-hidden bg-white border-2 border-gray-300 rounded-3xl group hover:cursor-pointer">
                 <div class="relative">
                   <div
                        :class="`absolute z-10 ${showCollapse === poll.id ? 'block' : 'hidden'} shadow-lg top-16 right-2 w-44 animate-fade-down animate-once animate-ease-in-out rounded-2xl overflow-hidden`">
@@ -397,7 +410,7 @@ export default {
           </div>
           <div class="flex justify-end items-enter">
             <div class="relative">
-              <input id="search" type="text" class="z-0 px-4 transition duration-150 rounded search-input focus:border-primary focus:shadow focus:outline-none focus:ring-2 focus:ring-primary" v-model="searchQuery"
+              <input id="search" type="text" class="z-0 px-4 transition duration-150 rounded search-input focus:border-primary focus:shadow focus:outline-none focus:ring-2 focus:ring-primary" v-model="searchQuery" @keyup.enter="handleSearchFiler"
                      placeholder="搜尋投票" />
               <label for="search" class="absolute top-2 right-4">
                 <i v-if="!searchQuery" class="z-20 text-gray-2 hover:text-gray-3 bi bi-search" />
@@ -433,6 +446,7 @@ export default {
           </div>
         </div>
       </div>
+      <p class="text-2xl text-center" v-if="allPolls.length === 0 && (doSort || searchQuery )">沒有符合搜尋的投票</p>
       <Pagination @updatePage="updatePage" />
     </section>
     <PollModal v-if="showPollModal" :openModal="showPollModal" :functionType="'新增'"

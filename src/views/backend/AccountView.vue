@@ -126,7 +126,7 @@ export default {
             this.$swal({
               title: '登入失敗，請重新登入',
             });
-            this.$router.push('/login');
+            window.location.href = '/login';
           }
         })
         .catch((err) => {
@@ -169,7 +169,6 @@ export default {
       const apiUrl = `${import.meta.env.VITE_APP_API_URL}/api/member/${id}`;
       this.$http.get(apiUrl)
         .then((res) => {
-          console.log('memberResult', res.data.result);
           this.memberPerson = res.data.result;
           if (!this.memberPerson.socialMedia.length) {
             this.memberPerson.socialMedia.push(
