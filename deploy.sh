@@ -23,7 +23,8 @@ git commit -m 'deploy'
 # ======= 下面兩種方式差異在部署的分支,擇一即可：
 
 # === 部署至主線 main 上,開啟下面第兩個#
-# if you are deploying to https://<USERNAME>.github.io
+# if you are deploying to https://<caiweien 
+>.github.io
 # git push -f git@github.com:<caiweien>/<caiweien>.github.io.git main
 
 # === 部署到 gh-pages,開啟下面第兩個#(不熟悉可選此！)
